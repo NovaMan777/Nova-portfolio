@@ -184,7 +184,7 @@ export const ContactSection = () => {
                 </div>
                 <div>
                   <span className="text-sm sm:text-base font-medium">
-                    Chișinău, Moldova
+                    Mumbai, India
                   </span>
                 </div>
               </div>
