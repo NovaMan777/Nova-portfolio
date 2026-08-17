@@ -1,205 +1,153 @@
-import {
-  Mail,
-  MapPin,
-  Send,
-  Github,
-  Loader2,
-  Sparkles
-} from "lucide-react";
+import { Mail, MapPin, Send, Github, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
-
+import { SectionHeader } from "./SectionHeader";
 
 export const ContactSection = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
+    name: "",
+    email: "",
+    message: "",
   });
 
   const validateForm = () => {
     if (!formData.name.trim()) {
-      toast({
-        title: "Name is required",
-        variant: "destructive"
-      });
+      toast({ title: "Name is required", variant: "destructive" });
       return false;
     }
-
     if (!formData.email.trim()) {
-      toast({
-        title: "Email is required",
-        variant: "destructive"
-      });
-      return false;
-    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      toast({
-        title: "Invalid email format",
-        variant: "destructive"
-      });
+      toast({ title: "Email is required", variant: "destructive" });
       return false;
     }
-
+    if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      toast({ title: "Invalid email format", variant: "destructive" });
+      return false;
+    }
     if (!formData.message.trim() || formData.message.length < 10) {
       toast({
         title: "Message must be at least 10 characters",
-        variant: "destructive"
+        variant: "destructive",
       });
       return false;
     }
-
     return true;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
-
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('https://formspree.io/f/xnjojaaq', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch("https://formspree.io/f/xnjojaaq", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
         toast({
-          title: "Message sent! 🎉",
+          title: "Message sent",
           description: "I'll get back to you within 24 hours.",
-          variant: "success",
-          className: "bg-green-600 text-white dark:bg-green-500 border border-green-700 shadow-lg"
         });
-        setFormData({ name: '', email: '', message: '' });
+        setFormData({ name: "", email: "", message: "" });
       } else {
-        throw new Error('Failed to send message');
+        throw new Error("Failed to send message");
       }
-    } catch (error) {
+    } catch {
       toast({
-        title: "Oops! Something went wrong",
-        description: "Please try again or email me directly at uigraslasu@gmail.com",
-        variant: "destructive"
+        title: "Something went wrong",
+        description: "Please try again or email me at uigraslasu@gmail.com",
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const details = [
+    {
+      icon: Mail,
+      label: "Email",
+      value: "uigraslasu@gmail.com",
+      href: "mailto:uigraslasu@gmail.com",
+    },
+    {
+      icon: Send,
+      label: "Telegram",
+      value: "@TomasCooper1004",
+      href: "https://t.me/TomasCooper1004",
+    },
+    {
+      icon: Github,
+      label: "GitHub",
+      value: "@tomas0502",
+      href: "https://github.com/tomas0502",
+    },
+    {
+      icon: MapPin,
+      label: "Location",
+      value: "Mumbai, India",
+    },
+  ];
+
   return (
-    <section id="contact" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 relative bg-background">
+    <section id="contact" className="py-20 md:py-28 px-4">
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-12 sm:mb-16">
-          {/* <span className="inline-block px-3 py-1 text-xs sm:text-sm font-medium rounded-full bg-primary/10 text-primary mb-3 sm:mb-4">
-            Let's Connect
-          </span> */}
-          <div className="inline-flex items-center gap-3 px-4 sm:px-6 py-2 sm:py-3 rounded-2xl bg-primary/10 border border-primary/20 mb-6 transition-all duration-500 hover:bg-primary/15 hover:scale-105 group cursor-pointer">
-            <div className="relative">
-              <Sparkles className="h-4 sm:h-5 w-4 sm:w-5 text-primary animate-pulse" />
-              <div className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-ping" />
-            </div>
-            <span className="text-sm sm:text-base font-semibold text-primary tracking-wide">LET'S CONNECT</span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6">
-            <span className="block text-primary animate-pulse">Get In Touch</span>
-          </h1>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Have a a project in mind or just want to say hi? My inbox is always open.
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="Contact"
+          title="Let's make something"
+          highlight="worth shipping."
+          description="Have a project in mind, a role to fill, or just want to say hello? My inbox is open."
+        />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12">
-          {/* Contact Information */}
-          <div className="space-y-6 sm:space-y-8 p-6 sm:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br from-secondary/20 to-background border border-border">
-            <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-2">
-              <span className="w-3 sm:w-4 h-3 sm:h-4 rounded-full bg-primary"></span>
-              Contact Details
-            </h3>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div className="lg:col-span-2 space-y-3 text-left">
+            {details.map((item) => {
+              const content = (
+                <div className="flex items-center gap-4 p-4 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors">
+                  <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
+                    <item.icon className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                      {item.label}
+                    </p>
+                    <p className="text-sm font-medium">{item.value}</p>
+                  </div>
+                </div>
+              );
 
-            <div className="space-y-4 sm:space-y-6">
-              <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-accent/30 rounded-lg sm:rounded-xl transition-all duration-300 pl-0 sm:pl-0">
-                <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-primary/10 text-primary">
-                  <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
-                </div>
-                <div>
-                  <a
-                    href="mailto:uigraslasu@gmail.com"
-                    className="text-sm sm:text-base font-medium hover:text-primary transition-colors"
-                  >
-                    uigraslasu@gmail.com
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-accent/30 rounded-lg sm:rounded-xl transition-all duration-300 pl-0 sm:pl-0">
-                <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-primary/10 text-primary">
-                  <Send className="h-4 w-4 sm:h-5 sm:w-5" />
-                </div>
-                <div>
-                  <a
-                    href="https://t.me/TomasCooper1004"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm sm:text-base font-medium hover:text-primary transition-colors"
-                  >
-                    @TomasCooper1004
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-accent/30 rounded-lg sm:rounded-xl transition-all duration-300 pl-0 sm:pl-0">
-                <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-primary/10 text-primary">
-                  <Github className="h-4 w-4 sm:h-5 sm:w-5" />
-                </div>
-                <div>
-                  <a
-                    href="https://github.com/tomas0502"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm sm:text-base font-medium hover:text-primary transition-colors"
-                  >
-                    @tomas0502
-                  </a>
-                </div>
-              </div>
-
-
-              <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-accent/30 rounded-lg sm:rounded-xl transition-all duration-300 pl-0 sm:pl-0">
-                <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-primary/10 text-primary">
-                  <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
-                </div>
-                <div>
-                  <span className="text-sm sm:text-base font-medium">
-                    Mumbai, India
-                  </span>
-                </div>
-              </div>
-            </div>
+              return item.href ? (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target={item.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                >
+                  {content}
+                </a>
+              ) : (
+                <div key={item.label}>{content}</div>
+              );
+            })}
           </div>
 
-          {/* Contact Form */}
-          <div className="p-6 sm:p-8 rounded-xl sm:rounded-2xl bg-card border border-border shadow-sm">
-            <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-2">
-              <span className="w-3 sm:w-4 h-3 sm:h-4 rounded-full bg-primary"></span>
-              Send Me a Message
-            </h3>
-
-            <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
-              <div className="space-y-1">
+          <div className="lg:col-span-3 p-6 sm:p-8 rounded-3xl bg-card border border-border text-left">
+            <h3 className="text-xl font-semibold mb-6">Send a message</h3>
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <div>
+                <label htmlFor="name" className="block text-xs font-medium mb-1.5 text-muted-foreground">
+                  Name
+                </label>
                 <input
                   type="text"
                   id="name"
@@ -207,12 +155,14 @@ export const ContactSection = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 focu~s:border-transparent transition-all text-sm sm:text-base"
-                  placeholder="John Doe"
+                  className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  placeholder="Jane Doe"
                 />
               </div>
-
-              <div className="space-y-1">
+              <div>
+                <label htmlFor="email" className="block text-xs font-medium mb-1.5 text-muted-foreground">
+                  Email
+                </label>
                 <input
                   type="email"
                   id="email"
@@ -220,41 +170,42 @@ export const ContactSection = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all text-sm sm:text-base"
-                  placeholder="john@example.com"
+                  className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  placeholder="jane@company.com"
                 />
               </div>
-
-              <div className="space-y-1">
+              <div>
+                <label htmlFor="message" className="block text-xs font-medium mb-1.5 text-muted-foreground">
+                  Message
+                </label>
                 <textarea
                   id="message"
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  rows={4}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all resize-none text-sm sm:text-base"
-                  placeholder="Hey, I'd love to collaborate on..."
+                  rows={5}
+                  className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
+                  placeholder="Tell me a little about the project..."
                 />
               </div>
-
               <button
                 type="submit"
                 disabled={isSubmitting}
                 className={cn(
-                  "cursor-pointer w-full flex items-center justify-center gap-2 py-2 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-medium hover:opacity-90 transition-all duration-300 shadow-lg shadow-primary/20 text-sm sm:text-base",
+                  "cursor-pointer w-full cosmic-button",
                   isSubmitting && "opacity-80 cursor-not-allowed"
                 )}
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
                     Sending...
                   </>
                 ) : (
                   <>
-                    Send Message
-                    <Send size={16} className="sm:size-[18px]" />
+                    Send message
+                    <Send size={16} />
                   </>
                 )}
               </button>

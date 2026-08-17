@@ -10,116 +10,92 @@ import {
   Moon,
   Volume2,
   VolumeX,
+  ArrowUpRight,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { name: "Home", href: "#hero", icon: Home },
   { name: "About", href: "#about", icon: User },
   { name: "Skills", href: "#skills", icon: Code },
-  { name: "Projects", href: "#projects", icon: Briefcase },
-  { name: "Testimonials", href: "#testimonials", icon: MessageSquare },
+  { name: "Work", href: "#projects", icon: Briefcase },
+  { name: "Kind words", href: "#testimonials", icon: MessageSquare },
   { name: "Contact", href: "#contact", icon: Mail },
-  // { name: "Blog", href: "https://blogni.vercel.app", icon: BookOpen },
 ];
 
 const ThemeToggle = () => {
-  const [theme, setTheme] = useState("light");
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    const stored = localStorage.getItem("theme");
-    if (stored === "dark") {
-      document.documentElement.classList.add("dark");
-      setTheme("dark");
-    }
-  }, []);
+  useEffect(() => setMounted(true), []);
 
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    document.documentElement.classList.toggle("dark");
-    localStorage.setItem("theme", newTheme);
-    setTheme(newTheme);
-  };
+  if (!mounted) {
+    return <div className="w-9 h-9" aria-hidden="true" />;
+  }
+
+  const isDark = resolvedTheme === "dark";
 
   return (
     <button
-      onClick={toggleTheme}
-      className="cursor-pointer p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className="cursor-pointer p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
       title="Toggle theme"
       aria-label="Toggle theme"
     >
-      {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+      {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
     </button>
   );
 };
 
 export const Navbar = () => {
   const [activeSection, setActiveSection] = useState("#hero");
-  const [showNavbar, setShowNavbar] = useState(true);
-  const [keepShown, setKeepShown] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [isAudioReady, setIsAudioReady] = useState(false);
-  const lastScrollYRef = useRef(0);
   const audioRef = useRef(null);
 
-  const musicUrl = "/music.mp3";
-
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      audioRef.current = new Audio(musicUrl);
-      audioRef.current.loop = true;
-      audioRef.current.volume = 0.5;
-      audioRef.current.preload = "auto";
+    audioRef.current = new Audio("/music.mp3");
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.22;
+    audioRef.current.preload = "auto";
 
-      const handleCanPlay = () => setIsAudioReady(true);
+    const handleCanPlay = () => setIsAudioReady(true);
+    audioRef.current.addEventListener("canplaythrough", handleCanPlay);
 
-      audioRef.current.addEventListener("canplaythrough", handleCanPlay);
-
-      return () => {
-        if (audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current.removeEventListener("canplaythrough", handleCanPlay);
-          audioRef.current = null;
-        }
-      };
-    }
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.removeEventListener("canplaythrough", handleCanPlay);
+        audioRef.current = null;
+      }
+    };
   }, []);
 
   const toggleMusic = () => {
     if (!audioRef.current || !isAudioReady) return;
-
     if (isMusicPlaying) {
       audioRef.current.pause();
     } else {
       audioRef.current.play().catch(console.error);
     }
-
     setIsMusicPlaying(!isMusicPlaying);
   };
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY > lastScrollYRef.current && currentScrollY > 100) {
-        setShowNavbar(false);
-        setKeepShown(false);
-      } else {
-        setShowNavbar(true);
-      }
-
-      lastScrollYRef.current = currentScrollY;
+      setScrolled(window.scrollY > 24);
 
       const sections = navItems.map((item) => item.href);
-      const scrollPosition = currentScrollY + 100;
+      const scrollPosition = window.scrollY + 120;
 
       for (const section of sections) {
         const element = document.querySelector(section);
         if (element) {
           const offsetTop = element.offsetTop;
           const offsetHeight = element.offsetHeight;
-
           if (
             scrollPosition >= offsetTop &&
             scrollPosition < offsetTop + offsetHeight
@@ -131,84 +107,130 @@ export const Navbar = () => {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <>
-      {/* Top Right Buttons */}
-      <motion.div
-        className="fixed top-4 right-4 z-50 flex gap-2"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        {/* Website Globe Button */}
-        
-
-        {/* Music Button */}
-        <motion.button
-          onClick={toggleMusic}
-          disabled={!isAudioReady}
-          className={cn(
-            "p-2 rounded-full bg-white/80 dark:bg-black/80 backdrop-blur-md",
-            "text-primary hover:bg-primary/10 dark:hover:bg-primary/20",
-            "border border-gray-200 dark:border-gray-700 shadow-sm",
-            "flex items-center justify-center",
-            !isAudioReady && "opacity-50 cursor-not-allowed"
-          )}
-          whileHover={{ scale: isAudioReady ? 1.05 : 1 }}
-          whileTap={{ scale: isAudioReady ? 0.95 : 1 }}
-          title={
-            isAudioReady ? (isMusicPlaying ? "Pause music" : "Play music") : "Loading music..."
-          }
-          aria-label={
-            isAudioReady ? (isMusicPlaying ? "Pause music" : "Play music") : "Loading music"
-          }
-        >
-          {isMusicPlaying ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
-        </motion.button>
-      </motion.div>
-
-      {/* Bottom Navbar */}
-      <motion.div
-        className={cn(
-          "fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50",
-          "transition-transform duration-300 ease-in-out",
-          showNavbar || keepShown ? "translate-y-0" : "translate-y-full"
-        )}
-        style={{ willChange: "transform" }}
-        initial={{ y: 20, opacity: 0 }}
+      <motion.header
+        className="fixed top-0 left-0 right-0 z-50 hidden md:block"
+        initial={{ y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        onMouseEnter={() => setKeepShown(true)}
-        onMouseLeave={() => {}}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="flex items-center justify-center bg-white/80 dark:bg-black/80 backdrop-blur-md rounded-full shadow-lg p-2 border border-gray-200 dark:border-gray-700">
-          <div className="flex space-x-1 items-center">
-            {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
+        <div
+          className={cn(
+            "mx-auto mt-4 max-w-6xl px-4 transition-all duration-300",
+            scrolled && "mt-3"
+          )}
+        >
+          <div
+            className={cn(
+              "flex items-center justify-between gap-4 rounded-full border px-3 py-2 backdrop-blur-xl transition-all duration-300",
+              scrolled
+                ? "bg-background/80 border-border shadow-lg shadow-black/5"
+                : "bg-background/50 border-transparent"
+            )}
+          >
+            <a href="#hero" className="flex items-center gap-2.5 pl-2 pr-1">
+              <img src="/logo.svg" alt="" className="h-7 w-7 object-contain dark:invert" />
+              <span className="font-semibold tracking-tight text-foreground">
+                Tomas
+              </span>
+            </a>
+
+            <nav className="flex items-center gap-0.5">
+              {navItems.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className={cn(
+                    "px-3.5 py-1.5 rounded-full text-sm transition-colors",
+                    activeSection === item.href
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  )}
+                >
+                  {item.name}
+                </a>
+              ))}
+            </nav>
+
+            <div className="flex items-center gap-1 pr-1">
+              <button
+                onClick={toggleMusic}
+                disabled={!isAudioReady}
                 className={cn(
-                  "p-2 rounded-full transition-colors flex flex-col items-center",
-                  activeSection === item.href
-                    ? "bg-primary text-white"
-                    : "text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary"
+                  "p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors",
+                  !isAudioReady && "opacity-40 cursor-not-allowed"
                 )}
-                aria-label={item.name}
+                title={isMusicPlaying ? "Pause music" : "Play music"}
+                aria-label={isMusicPlaying ? "Pause music" : "Play music"}
               >
-                <item.icon className="w-5 h-5" />
-                <span className="text-xs mt-1 hidden md:block">{item.name}</span>
-              </a>
-            ))}
-            <div className="flex items-center px-2">
+                {isMusicPlaying ? (
+                  <Volume2 className="w-4 h-4" />
+                ) : (
+                  <VolumeX className="w-4 h-4" />
+                )}
+              </button>
               <ThemeToggle />
+              <a
+                href="#contact"
+                className="ml-1 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition-opacity"
+              >
+                Let&apos;s talk
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
             </div>
           </div>
         </div>
-      </motion.div>
+      </motion.header>
+
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-2 md:hidden">
+        <button
+          onClick={toggleMusic}
+          disabled={!isAudioReady}
+          className={cn(
+            "p-2.5 rounded-full bg-background/80 backdrop-blur-md border border-border text-foreground shadow-sm",
+            !isAudioReady && "opacity-40"
+          )}
+          aria-label={isMusicPlaying ? "Pause music" : "Play music"}
+        >
+          {isMusicPlaying ? (
+            <Volume2 className="w-4 h-4" />
+          ) : (
+            <VolumeX className="w-4 h-4" />
+          )}
+        </button>
+        <div className="rounded-full bg-background/80 backdrop-blur-md border border-border shadow-sm">
+          <ThemeToggle />
+        </div>
+      </div>
+
+      <motion.nav
+        className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 md:hidden"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+      >
+        <div className="flex items-center gap-0.5 rounded-full bg-background/85 backdrop-blur-xl border border-border shadow-lg p-1.5">
+          {navItems.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className={cn(
+                "p-2.5 rounded-full transition-colors",
+                activeSection === item.href
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground"
+              )}
+              aria-label={item.name}
+            >
+              <item.icon className="w-4 h-4" />
+            </a>
+          ))}
+        </div>
+      </motion.nav>
     </>
   );
 };

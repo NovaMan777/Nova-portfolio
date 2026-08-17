@@ -5,10 +5,18 @@ import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { Toaster } from "@/components/ui/toaster";
 import WelcomeScreen from "@/components/WelcomeScreen";
-import { Analytics } from "@vercel/analytics/react"; 
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
-  const [welcomeComplete, setWelcomeComplete] = useState(false);
+  const [welcomeComplete, setWelcomeComplete] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return sessionStorage.getItem("welcome-seen") === "1";
+  });
+
+  const handleWelcomeComplete = () => {
+    sessionStorage.setItem("welcome-seen", "1");
+    setWelcomeComplete(true);
+  };
 
   return (
     <ThemeProvider
@@ -19,7 +27,7 @@ function App() {
     >
       <Toaster />
       {!welcomeComplete ? (
-        <WelcomeScreen onWelcomeComplete={() => setWelcomeComplete(true)} />
+        <WelcomeScreen onWelcomeComplete={handleWelcomeComplete} />
       ) : (
         <BrowserRouter>
           <Routes>
