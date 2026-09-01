@@ -9,14 +9,11 @@ const codeSnippets = [
   "  name: 'Tomas Cooper',",
   "  stack: ['React', 'Next.js', 'Node.js'],",
   "  focus: 'Scalable product engineering',",
-  "  status: 'Open to opportunities'",
   "});",
-  "",
-  "await engineer.ship();",
-  "// SaaS · E-commerce · MVPs · Platforms",
-  "",
-  'console.log("Let\'s build something exceptional.");',
 ];
+
+const CODE_LINE_HEIGHT = 24;
+const codeBlockHeight = codeSnippets.length * CODE_LINE_HEIGHT;
 
 const achievements = [
   { number: "7+", label: "Years shipping" },
@@ -120,11 +117,11 @@ export const HeroSection = () => {
             </motion.p>
 
             <motion.h1
-              className="font-serif text-5xl sm:text-6xl md:text-7xl leading-[1.05] tracking-tight text-foreground"
+              className="font-serif font-normal text-5xl sm:text-6xl md:text-7xl leading-[1.05] tracking-tight text-foreground"
               variants={{ hidden: { y: 18, opacity: 0 }, visible: { y: 0, opacity: 1 } }}
             >
               Tomas{" "}
-              <span className="italic text-brand">Cooper</span>
+              <span className="font-normal italic text-brand">Cooper</span>
             </motion.h1>
 
             <motion.p
@@ -194,17 +191,27 @@ export const HeroSection = () => {
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 </div>
 
-                <div className="font-mono text-[13px] leading-6 bg-background/80 rounded-xl border border-border p-5 min-h-[340px] text-left">
+                <div
+                  className="font-mono text-[13px] leading-6 bg-background/80 rounded-xl border border-border p-5 text-left overflow-hidden"
+                  style={{ height: codeBlockHeight + 40 }}
+                >
                   {codeSnippets.map((line, index) => (
-                    <div key={index} className={`min-h-[24px] ${lineClass(line)}`}>
-                      {index < currentCodeLine ? line : ""}
-                      {index === currentCodeLine && (
+                    <div
+                      key={index}
+                      className={`h-6 whitespace-nowrap ${lineClass(line)}`}
+                    >
+                      {index < currentCodeLine ? (
+                        line || "\u00A0"
+                      ) : index === currentCodeLine ? (
                         <>
                           {displayedCode}
                           <span className="inline-block w-[7px] h-[14px] bg-primary ml-0.5 align-middle animate-pulse" />
                         </>
+                      ) : (
+                        <span className="invisible select-none" aria-hidden="true">
+                          {line || "\u00A0"}
+                        </span>
                       )}
-                      {line === "" && "\u00A0"}
                     </div>
                   ))}
                 </div>

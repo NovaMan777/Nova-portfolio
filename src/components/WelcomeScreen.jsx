@@ -44,12 +44,12 @@ const WelcomeScreen = ({ onWelcomeComplete }) => {
             Full-stack engineer
           </motion.p>
           <motion.h1
-            className="font-serif text-5xl sm:text-7xl tracking-tight"
+            className="font-serif font-normal text-5xl sm:text-6xl md:text-7xl leading-[1.05] tracking-tight text-foreground"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.7 }}
           >
-            Tomas <span className="italic text-brand">Cooper</span>
+            Tomas <span className="font-normal italic text-brand">Cooper</span>
           </motion.h1>
           <motion.div
             className="mx-auto mt-8 h-px w-24 bg-linear-to-r from-transparent via-primary to-transparent"

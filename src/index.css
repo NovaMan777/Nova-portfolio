@@ -145,6 +145,7 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: "ss01" 1, "cv11" 1;
+    font-synthesis: none;
     transition: background-color 0.35s ease, color 0.35s ease;
   }
 
