@@ -12,7 +12,6 @@ function App() {
     if (typeof window === "undefined") return false;
     return sessionStorage.getItem("welcome-seen") === "1";
   });
-
   const handleWelcomeComplete = () => {
     sessionStorage.setItem("welcome-seen", "1");
     setWelcomeComplete(true);
