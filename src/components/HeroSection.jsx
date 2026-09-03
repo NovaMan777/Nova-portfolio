@@ -19,7 +19,7 @@ const achievements = [
   { number: "7+", label: "Years shipping" },
   { number: "55+", label: "Projects delivered" },
   { number: "35+", label: "Clients served" },
-  { number: "<24h", label: "Typical reply" },
+  { number: "< 24h", label: "Typical reply" },
 ];
 
 const orbs = [
@@ -149,26 +149,27 @@ export const HeroSection = () => {
             </motion.div>
 
             <motion.div
-              className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start"
+              className="flex flex-wrap gap-3 justify-center lg:justify-start"
               variants={{ hidden: { y: 18, opacity: 0 }, visible: { y: 0, opacity: 1 } }}
             >
               <a href="#projects" className="cosmic-button">
-                <Briefcase className="h-4 w-4" />
-                View selected work
-                <ArrowRight className="h-4 w-4" />
+                <Briefcase className="size-4 shrink-0" strokeWidth={1.75} />
+                <span>View selected work</span>
+                <ArrowRight className="size-4 shrink-0" strokeWidth={1.75} />
               </a>
               <a href="#contact" className="btn-ghost">
-                <Mail className="h-4 w-4" />
-                Get in touch
+                <Mail className="size-4 shrink-0" strokeWidth={1.75} />
+                <span>Get in touch</span>
               </a>
               <button
+                type="button"
                 onClick={() =>
                   window.open("/Tomas-resume.pdf", "_blank", "noopener,noreferrer")
                 }
                 className="cursor-pointer btn-ghost text-muted-foreground"
               >
-                <FileText className="h-4 w-4" />
-                Resume
+                <FileText className="size-4 shrink-0" strokeWidth={1.75} />
+                <span>Resume</span>
               </button>
             </motion.div>
           </div>
