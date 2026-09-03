@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { Home } from "./pages/Home";
@@ -10,15 +10,11 @@ import "@/fonts";
 
 function App() {
   const [bootComplete, setBootComplete] = useState(false);
-  const [seenBefore] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return sessionStorage.getItem("boot-complete") === "1";
-  });
 
-  const handleBootComplete = () => {
+  const handleBootComplete = useCallback(() => {
     sessionStorage.setItem("boot-complete", "1");
     setBootComplete(true);
-  };
+  }, []);
 
   return (
     <ThemeProvider
@@ -29,10 +25,7 @@ function App() {
     >
       <Toaster />
       {!bootComplete ? (
-        <LoadingScreen
-          onComplete={handleBootComplete}
-          requireEnter={!seenBefore}
-        />
+        <LoadingScreen onComplete={handleBootComplete} />
       ) : (
         <BrowserRouter>
           <Routes>
