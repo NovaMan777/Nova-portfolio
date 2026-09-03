@@ -27,12 +27,21 @@
 
     <meta name="theme-color" content="#07090c" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700;800&display=block"
-      rel="stylesheet"
-    />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          var theme = stored;
+          if (!theme || theme === "system") {
+            theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+          }
+          document.documentElement.classList.toggle("dark", theme === "dark");
+          document.documentElement.style.colorScheme = theme === "dark" ? "dark" : "light";
+        } catch (e) {}
+      })();
+    </script>
 
     <script type="application/ld+json">
       {

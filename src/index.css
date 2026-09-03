@@ -140,13 +140,26 @@
 
   html {
     @apply scroll-smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: "ss01" 1, "cv11" 1;
     font-synthesis: none;
+    font-kerning: normal;
     transition: background-color 0.35s ease, color 0.35s ease;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-synthesis: none;
   }
 
   body::before {

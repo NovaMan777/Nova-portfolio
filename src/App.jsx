@@ -4,17 +4,20 @@ import { ThemeProvider } from "next-themes";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { Toaster } from "@/components/ui/toaster";
-import WelcomeScreen from "@/components/WelcomeScreen";
+import LoadingScreen from "@/components/LoadingScreen";
 import { Analytics } from "@vercel/analytics/react";
+import "@/fonts";
 
 function App() {
-  const [welcomeComplete, setWelcomeComplete] = useState(() => {
+  const [bootComplete, setBootComplete] = useState(false);
+  const [seenBefore] = useState(() => {
     if (typeof window === "undefined") return false;
-    return sessionStorage.getItem("welcome-seen") === "1";
+    return sessionStorage.getItem("boot-complete") === "1";
   });
-  const handleWelcomeComplete = () => {
-    sessionStorage.setItem("welcome-seen", "1");
-    setWelcomeComplete(true);
+
+  const handleBootComplete = () => {
+    sessionStorage.setItem("boot-complete", "1");
+    setBootComplete(true);
   };
 
   return (
@@ -25,8 +28,11 @@ function App() {
       disableTransitionOnChange
     >
       <Toaster />
-      {!welcomeComplete ? (
-        <WelcomeScreen onWelcomeComplete={handleWelcomeComplete} />
+      {!bootComplete ? (
+        <LoadingScreen
+          onComplete={handleBootComplete}
+          requireEnter={!seenBefore}
+        />
       ) : (
         <BrowserRouter>
           <Routes>
