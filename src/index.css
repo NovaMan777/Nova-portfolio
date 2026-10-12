@@ -108,26 +108,6 @@
   }
 }
 
-@utility container {
-  margin-inline: auto;
-  padding-inline: 1.25rem;
-
-  @media (width >= 640px) {
-    max-width: 640px;
-    padding-inline: 1.5rem;
-  }
-  @media (width >= 768px) {
-    max-width: 768px;
-  }
-  @media (width >= 1024px) {
-    max-width: 1024px;
-    padding-inline: 2rem;
-  }
-  @media (width >= 1280px) {
-    max-width: 1200px;
-  }
-}
-
 @utility cosmic-button {
   @apply inline-flex items-center justify-center gap-2.5 px-5 py-2.5 rounded-full bg-primary text-primary-foreground font-semibold text-sm leading-none tracking-wide whitespace-nowrap transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0;
   box-shadow: 0 0 24px hsl(var(--primary) / 0.35);
