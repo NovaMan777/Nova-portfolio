@@ -6,10 +6,8 @@ import {
   Sparkles,
   Zap,
   Eye,
-  Play,
-  X,
 } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeader } from "./SectionHeader";
 
@@ -21,10 +19,9 @@ const projects = [
     description:
       "Open-source AI workspace built with the PERN stack and Gemini — generate images, drafts, and resume reviews from one place.",
     image: "/projects/project8.png",
-    video: "/projects/videos/genaxix-demo.mp4",
     tags: ["PERN", "Clerk", "Gemini", "Billing"],
     demoUrl: "https://genaxis.vercel.app",
-    githubUrl: "https://github.com/NovaMan777",
+    githubUrl: "https://github.com/NovaMan777/GenAxis",
     featured: true,
     accentColor: "from-emerald-500 to-teal-600",
     status: "Live",
@@ -37,7 +34,6 @@ const projects = [
     description:
       "AI-powered hiring platform that streamlines job matching, candidate tracking, and application management.",
     image: "/projects/project9.png",
-    video: "/projects/videos/ntro-demo.mp4",
     tags: ["Webflow", "MongoDB", "JavaScript", "AI"],
     demoUrl: "https://www.ntro.io/",
     githubUrl: "#",
@@ -53,7 +49,6 @@ const projects = [
     description:
       "Fashion marketplace with product recommendations and a smooth checkout experience.",
     image: "/projects/project1.png",
-    video: "/projects/videos/vante-demo.mp4",
     tags: ["React", "Node.js", "Stripe", "Redis"],
     demoUrl: "https://e-commerce-website-4w6a.vercel.app",
     githubUrl: "https://github.com/NovaMan777/E-commerce-website",
@@ -69,7 +64,6 @@ const projects = [
     description:
       "Chat platform with realtime messaging, media sharing, and authentication.",
     image: "/projects/project2.png",
-    video: "/projects/videos/converse-demo.mp4",
     tags: ["Socket.IO", "MongoDB", "React", "WebRTC"],
     demoUrl: "https://converse-pro-frontend.vercel.app",
     githubUrl: "https://github.com/NovaMan777/converse-pro",
@@ -85,7 +79,6 @@ const projects = [
     description:
       "AI-powered content generation platform with multi-language support.",
     image: "/projects/project3.png",
-    video: "/projects/videos/blogni-demo.mp4",
     tags: ["Next.js", "Gemini", "Clerk", "Redis"],
     demoUrl: "https://blogni.vercel.app",
     githubUrl: "https://github.com/NovaMan777/Blogni",
@@ -100,7 +93,6 @@ const projects = [
     description:
       "Personal finance tracker with expense management and budgeting views.",
     image: "/projects/project4.png",
-    video: "/projects/videos/spendlix-demo.mp4",
     tags: ["React", "Chart.js", "Node.js", "Firebase"],
     demoUrl: "https://spendlix.vercel.app/login",
     githubUrl: "https://github.com/NovaMan777/Spendlix",
@@ -115,7 +107,6 @@ const projects = [
     description:
       "Food delivery experience with restaurant listings and order management.",
     image: "/projects/project5.png",
-    video: "/projects/videos/eattoo-demo.mp4",
     tags: ["React", "Redux", "Mapbox", "Stripe"],
     demoUrl: "https://eattoo-food-delivery-website-frontend.onrender.com/",
     githubUrl: "https://github.com/NovaMan777/Eattoo-food-delivery-website",
@@ -130,7 +121,6 @@ const projects = [
     description:
       "Job matching platform with candidate tracking and application management.",
     image: "/projects/project6.png",
-    video: "/projects/videos/jobque-demo.mp4",
     tags: ["Next.js", "PostgreSQL", "Redis", "AI"],
     demoUrl: "#",
     githubUrl: "#",
@@ -143,8 +133,6 @@ const projects = [
 export const ProjectsSection = () => {
   const [showAll, setShowAll] = useState(false);
   const [activeFilter, setActiveFilter] = useState("All");
-  const [selectedVideo, setSelectedVideo] = useState(null);
-  const videoRef = useRef(null);
 
   const filteredProjects =
     activeFilter === "All"
@@ -160,14 +148,6 @@ export const ProjectsSection = () => {
   const handleFilterChange = (category) => {
     setActiveFilter(category);
     setShowAll(false);
-  };
-
-  const handleCloseVideo = () => {
-    setSelectedVideo(null);
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
   };
 
   return (
@@ -231,15 +211,6 @@ export const ProjectsSection = () => {
                       {project.status}
                     </span>
                   </div>
-                  <button
-                    onClick={() => setSelectedVideo(project)}
-                    className="cursor-pointer absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/35 transition-colors"
-                    aria-label={`Play ${project.title} demo`}
-                  >
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity h-12 w-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg">
-                      <Play className="h-5 w-5 ml-0.5" />
-                    </span>
-                  </button>
                 </div>
 
                 <div className="p-6 flex-1 flex flex-col">
@@ -364,52 +335,6 @@ export const ProjectsSection = () => {
           </div>
         </div>
       </div>
-
-      <AnimatePresence>
-        {selectedVideo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4"
-            onClick={handleCloseVideo}
-          >
-            <motion.div
-              initial={{ scale: 0.94, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.94, opacity: 0 }}
-              className="relative bg-card rounded-2xl overflow-hidden shadow-2xl max-w-4xl w-full"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between p-5 border-b border-border text-left">
-                <div>
-                  <h3 className="text-lg font-semibold">{selectedVideo.title}</h3>
-                  <p className="text-muted-foreground text-sm">{selectedVideo.category}</p>
-                </div>
-                <button
-                  onClick={handleCloseVideo}
-                  className="cursor-pointer p-2 rounded-full hover:bg-muted"
-                  aria-label="Close demo"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-              <div className="aspect-video bg-black">
-                <video
-                  ref={videoRef}
-                  src={selectedVideo.video}
-                  controls
-                  autoPlay
-                  className="w-full h-full object-contain"
-                  onEnded={handleCloseVideo}
-                >
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 };
