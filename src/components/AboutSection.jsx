@@ -140,7 +140,7 @@ export const AboutSection = () => {
               Nova Man
               <span className="font-normal text-primary"> · Full-stack developer</span>
             </p>
-            <p className="mt-1 max-w-xl text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-muted-foreground">
               Seven years shipping product — from the interface through the API and the data underneath it.
             </p>
           </div>
