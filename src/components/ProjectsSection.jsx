@@ -20,11 +20,12 @@ const projects = [
       "Open-source AI workspace built with the PERN stack and Gemini — generate images, drafts, and resume reviews from one place.",
     image: "/projects/project8.png",
     tags: ["PERN", "Clerk", "Gemini", "Billing"],
-    demoUrl: "#",
+    demoUrl: "https://genaxis.vercel.app",
     githubUrl: "#",
+    codeUnavailable: true,
     featured: true,
     accentColor: "from-emerald-500 to-teal-600",
-    status: "Dead",
+    status: "Live",
     highlights: ["Image generation", "Article writer", "Resume reviewer"],
   },
   {
@@ -50,11 +51,12 @@ const projects = [
       "Fashion marketplace with product recommendations and a smooth checkout experience.",
     image: "/projects/project1.png",
     tags: ["React", "Node.js", "Stripe", "Redis"],
-    demoUrl: "#",
+    demoUrl: "https://e-commerce-website-4w6a.vercel.app",
     githubUrl: "#",
+    codeUnavailable: true,
     featured: true,
     accentColor: "from-violet-500 to-indigo-600",
-    status: "Dead",
+    status: "Live",
     highlights: ["Catalog", "Cart", "Payments"],
   },
   {
@@ -205,9 +207,7 @@ export const ProjectsSection = () => {
                       className={`px-2.5 py-1 rounded-full text-[11px] font-medium backdrop-blur border ${
                         project.status === "Live"
                           ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/25"
-                          : project.status === "Dead"
-                            ? "bg-rose-500/15 text-rose-500 border-rose-500/25"
-                            : "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/25"
+                          : "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/25"
                       }`}
                     >
                       {project.status}
@@ -264,11 +264,7 @@ export const ProjectsSection = () => {
                       }`}
                     >
                       <Eye size={15} />
-                      {project.status === "Dead"
-                        ? "Unavailable"
-                        : project.demoUrl === "#"
-                          ? "Coming soon"
-                          : "Live demo"}
+                      {project.demoUrl === "#" ? "Coming soon" : "Live demo"}
                     </a>
                     <a
                       href={project.githubUrl}
@@ -282,7 +278,7 @@ export const ProjectsSection = () => {
                       }`}
                     >
                       <Github size={15} />
-                      Code
+                      {project.codeUnavailable ? "Unavailable" : "Code"}
                     </a>
                   </div>
                 </div>
