@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/"
+      "source": "/((?!nova/|projects/|testimonials/|logo\\.svg|music\\.mp3).*)",
+      "destination": "/index.html"
     }
   ]
 }

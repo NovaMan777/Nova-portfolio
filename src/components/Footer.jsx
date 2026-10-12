@@ -1,7 +1,16 @@
+import { useEffect, useState } from "react";
 import { ArrowUp, Github, Mail, Send } from "lucide-react";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [showTop, setShowTop] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 480);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const quickLinks = [
     { name: "Home", href: "#hero" },
@@ -13,33 +22,32 @@ export const Footer = () => {
   const contactInfo = [
     {
       icon: <Mail size={14} />,
-      text: "uigraslasu@gmail.com",
-      href: "mailto:uigraslasu@gmail.com",
+      text: "seraph.nova.dev@gmail.com",
+      href: "mailto:seraph.nova.dev@gmail.com",
     },
     {
       icon: <Send size={14} />,
-      text: "@TomasCooper1004",
-      href: "https://t.me/TomasCooper1004",
+      text: "@NovaMan777",
+      href: "https://t.me/NovaMan777",
     },
     {
       icon: <Github size={14} />,
-      text: "@tomas0502",
-      href: "https://github.com/tomas0502",
+      text: "@NovaMan777",
+      href: "https://github.com/NovaMan777",
     },
   ];
 
   return (
-    <footer className="px-4 pb-24 md:pb-10 pt-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="rounded-3xl border border-border bg-card p-8 md:p-10">
+    <footer className="pb-24 pt-4 md:pb-5">
+      <div className="mx-auto max-w-[1440px] px-6">
+        <div className="hud-panel p-8 md:p-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
             <div>
-              <a href="#hero" className="flex items-center gap-2 mb-3">
-                <img src="/logo.svg" alt="" className="h-7 w-7 dark:invert" />
-                <span className="font-semibold tracking-tight">Tomas Cooper</span>
+              <a href="#hero" className="mb-3 inline-flex items-center gap-2">
+                <span className="font-semibold tracking-[0.18em]">NOVA MAN</span>
               </a>
-              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-                Full-stack engineer building considered products with React, Node.js, and modern cloud.
+              <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
+                Nova Man — full-stack developer. Creative technology for a brighter tomorrow.
               </p>
             </div>
 
@@ -82,19 +90,21 @@ export const Footer = () => {
           </div>
 
           <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-            <p>© {currentYear} Tomas Cooper. All rights reserved.</p>
+            <p>© {currentYear} Nova Man. All rights reserved.</p>
             <p>Designed & built with care.</p>
           </div>
         </div>
       </div>
 
-      <button
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className="cursor-pointer fixed bottom-20 md:bottom-6 right-4 z-40 p-3 rounded-full bg-foreground text-background shadow-lg hover:opacity-90 transition-opacity"
-        aria-label="Back to top"
-      >
-        <ArrowUp size={16} />
-      </button>
+      {showTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-24 right-4 z-40 cursor-pointer rounded-full bg-primary p-3 text-primary-foreground shadow-[0_0_24px_hsl(var(--primary)/0.35)] transition-opacity hover:opacity-90 md:bottom-6"
+          aria-label="Back to top"
+        >
+          <ArrowUp size={16} />
+        </button>
+      )}
     </footer>
   );
 };

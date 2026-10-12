@@ -24,7 +24,7 @@ const projects = [
     video: "/projects/videos/genaxix-demo.mp4",
     tags: ["PERN", "Clerk", "Gemini", "Billing"],
     demoUrl: "https://genaxis.vercel.app",
-    githubUrl: "https://github.com/tomas0502",
+    githubUrl: "https://github.com/NovaMan777",
     featured: true,
     accentColor: "from-emerald-500 to-teal-600",
     status: "Live",
@@ -56,7 +56,7 @@ const projects = [
     video: "/projects/videos/vante-demo.mp4",
     tags: ["React", "Node.js", "Stripe", "Redis"],
     demoUrl: "https://e-commerce-website-4w6a.vercel.app",
-    githubUrl: "https://github.com/tomas0502/E-commerce-website",
+    githubUrl: "https://github.com/NovaMan777/E-commerce-website",
     featured: true,
     accentColor: "from-violet-500 to-indigo-600",
     status: "Live",
@@ -72,7 +72,7 @@ const projects = [
     video: "/projects/videos/converse-demo.mp4",
     tags: ["Socket.IO", "MongoDB", "React", "WebRTC"],
     demoUrl: "https://converse-pro-frontend.vercel.app",
-    githubUrl: "https://github.com/tomas0502/converse-pro",
+    githubUrl: "https://github.com/NovaMan777/converse-pro",
     featured: true,
     accentColor: "from-blue-500 to-cyan-600",
     status: "Live",
@@ -88,7 +88,7 @@ const projects = [
     video: "/projects/videos/blogni-demo.mp4",
     tags: ["Next.js", "Gemini", "Clerk", "Redis"],
     demoUrl: "https://blogni.vercel.app",
-    githubUrl: "https://github.com/tomas0502/Blogni",
+    githubUrl: "https://github.com/NovaMan777/Blogni",
     accentColor: "from-amber-500 to-orange-600",
     status: "Live",
     highlights: ["AI drafting", "Multi-language", "Accounts"],
@@ -103,7 +103,7 @@ const projects = [
     video: "/projects/videos/spendlix-demo.mp4",
     tags: ["React", "Chart.js", "Node.js", "Firebase"],
     demoUrl: "https://spendlix.vercel.app/login",
-    githubUrl: "https://github.com/tomas0502/Spendlix",
+    githubUrl: "https://github.com/NovaMan777/Spendlix",
     accentColor: "from-rose-500 to-pink-600",
     status: "Live",
     highlights: ["Expense tracking", "Charts", "Budgets"],
@@ -118,7 +118,7 @@ const projects = [
     video: "/projects/videos/eattoo-demo.mp4",
     tags: ["React", "Redux", "Mapbox", "Stripe"],
     demoUrl: "https://eattoo-food-delivery-website-frontend.onrender.com/",
-    githubUrl: "https://github.com/tomas0502/Eattoo-food-delivery-website",
+    githubUrl: "https://github.com/NovaMan777/Eattoo-food-delivery-website",
     accentColor: "from-violet-500 to-purple-600",
     status: "Live",
     highlights: ["Listings", "Orders", "Maps"],
@@ -171,13 +171,13 @@ export const ProjectsSection = () => {
   };
 
   return (
-    <section id="projects" className="relative py-20 md:py-28 px-4">
-      <div className="container mx-auto max-w-6xl">
+    <section id="projects" className="relative scroll-mt-24 py-10 md:py-14">
+      <div className="mx-auto max-w-[1440px] px-6">
         <SectionHeader
           eyebrow="Selected work"
-          title="Products I've"
-          highlight="helped bring to life."
-          description="A mix of SaaS, marketplaces, and realtime products — each built to ship, not just to demo."
+          title="Products"
+          highlight="in production."
+          description="SaaS / marketplaces / realtime / AI"
         />
 
         <div className="flex flex-wrap justify-center gap-2 mb-12">
@@ -206,7 +206,7 @@ export const ProjectsSection = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.4, delay: index * 0.04 }}
-                className="group bg-card border border-border rounded-3xl overflow-hidden flex flex-col text-left hover:border-primary/30 transition-colors"
+                className="group hud-panel flex flex-col overflow-hidden text-left transition-colors hover:border-primary/60"
               >
                 <div className="relative h-52 overflow-hidden bg-muted">
                   <img
@@ -336,7 +336,7 @@ export const ProjectsSection = () => {
           </div>
         )}
 
-        <div className="mt-16 bg-card border border-border rounded-3xl p-8 md:p-12 text-center">
+        <div className="hud-panel mt-16 p-8 text-center md:p-12">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/8 text-primary text-xs font-medium mb-5">
             <Zap className="h-3.5 w-3.5" />
             Next project
@@ -353,7 +353,7 @@ export const ProjectsSection = () => {
               <ArrowRight size={16} />
             </a>
             <a
-              href="https://github.com/tomas0502"
+              href="https://github.com/NovaMan777"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-ghost"

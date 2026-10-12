@@ -1,33 +1,27 @@
-import { Sparkles } from "lucide-react";
-
 export const SectionHeader = ({
   eyebrow,
   title,
   highlight,
   description,
-  align = "center",
+  tone = "white",
 }) => {
-  const alignment =
-    align === "left"
-      ? "text-left items-start"
-      : "text-center items-center mx-auto";
+  const titleColor = tone === "green" ? "text-primary" : "text-foreground";
+  const highlightColor = tone === "green" ? "text-foreground" : "text-primary";
 
   return (
-    <div className={`flex flex-col ${alignment} mb-12 md:mb-16 max-w-3xl`}>
+    <div className="mx-auto mb-6 max-w-4xl text-center md:mb-7">
       {eyebrow && (
-        <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/8 border border-primary/15 text-primary text-[11px] font-semibold tracking-[0.18em] uppercase mb-5">
-          <Sparkles className="h-3.5 w-3.5" />
-          {eyebrow}
-        </span>
+        <p className="hud-kicker mb-3">{eyebrow}</p>
       )}
-      <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-foreground leading-[1.15]">
-        {title}{" "}
-        {highlight && (
-          <span className="font-serif italic text-primary">{highlight}</span>
-        )}
+      <h2
+        className={`text-[1.65rem] font-semibold uppercase leading-[1.05] tracking-[0.045em] sm:text-4xl md:text-5xl ${titleColor}`}
+      >
+        {title}
+        {highlight ? " " : ""}
+        {highlight && <span className={highlightColor}>{highlight}</span>}
       </h2>
       {description && (
-        <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl">
+        <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.22em] text-primary/85">
           {description}
         </p>
       )}

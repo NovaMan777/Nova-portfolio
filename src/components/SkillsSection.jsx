@@ -1,172 +1,165 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Cloud, Database, Monitor, Server } from "lucide-react";
+import { HudPanel } from "./HudPanel";
 import { SectionHeader } from "./SectionHeader";
 
-import htmlIcon from "@/assets/icons/html.png";
 import cssIcon from "@/assets/icons/css.png";
-import sassIcon from "@/assets/icons/saas.png";
+import dockerIcon from "@/assets/icons/docker.png";
+import expressIcon from "@/assets/icons/express.png";
+import githubIcon from "@/assets/icons/github.png";
+import graphqlIcon from "@/assets/icons/graphql.png";
 import jsIcon from "@/assets/icons/javascript.png";
-import tsIcon from "@/assets/icons/typescript.png";
-import reactIcon from "@/assets/icons/react.png";
+import mongodbIcon from "@/assets/icons/mongodb.png";
 import nextjsIcon from "@/assets/icons/nextjs.png";
 import nodejsIcon from "@/assets/icons/nodejs.png";
-import expressIcon from "@/assets/icons/express.png";
-import mongodbIcon from "@/assets/icons/mongodb.png";
 import postgresqlIcon from "@/assets/icons/postgresql.png";
-import graphqlIcon from "@/assets/icons/graphql.png";
-import javaIcon from "@/assets/icons/java.png";
-import webflowIcon from "@/assets/icons/webflow.png";
 import pythonIcon from "@/assets/icons/python.png";
-import gitIcon from "@/assets/icons/git.png";
-import githubIcon from "@/assets/icons/github.png";
-import dockerIcon from "@/assets/icons/docker.png";
-import firebaseIcon from "@/assets/icons/firebase.png";
-import vscodeIcon from "@/assets/icons/vscode.png";
-import clerkIcon from "@/assets/icons/cleark.png";
-import SQLIcon from "@/assets/icons/sql.png";
-import MySQLIcon from "@/assets/icons/mysql.png";
+import reactIcon from "@/assets/icons/react.png";
+import tsIcon from "@/assets/icons/typescript.png";
+import webflowIcon from "@/assets/icons/webflow.png";
 
-const skills = [
-  { name: "HTML5", category: "frontend", icon: "html" },
-  { name: "CSS3", category: "frontend", icon: "css" },
-  { name: "Sass", category: "frontend", icon: "sass" },
-  { name: "JavaScript", category: "frontend", icon: "javascript" },
-  { name: "Webflow", category: "frontend", icon: "webflow" },
-  { name: "TypeScript", category: "frontend", icon: "typescript" },
-  { name: "React", category: "frontend", icon: "react" },
-  { name: "Next.js", category: "frontend", icon: "nextjs" },
-  { name: "Node.js", category: "backend", icon: "nodejs" },
-  { name: "Express", category: "backend", icon: "express" },
-  { name: "MongoDB", category: "backend", icon: "mongodb" },
-  { name: "PostgreSQL", category: "backend", icon: "postgresql" },
-  { name: "GraphQL", category: "backend", icon: "graphql" },
-  { name: "Java", category: "backend", icon: "java" },
-  { name: "Python", category: "backend", icon: "python" },
-  { name: "Git", category: "tools", icon: "git" },
-  { name: "GitHub", category: "tools", icon: "github" },
-  { name: "Docker", category: "tools", icon: "docker" },
-  { name: "Firebase", category: "tools", icon: "firebase" },
-  { name: "VS Code", category: "tools", icon: "vscode" },
-  { name: "Clerk", category: "tools", icon: "clerk" },
-  { name: "SQL", category: "tools", icon: "sql" },
-  { name: "MySQL", category: "tools", icon: "mysql" },
+const domains = [
+  {
+    index: "01",
+    kicker: "Interface",
+    title: "Frontend",
+    subtitle: "Experience · components · interaction",
+    icon: Monitor,
+    chips: [
+      { icon: reactIcon, label: "RE" },
+      { icon: nextjsIcon, label: "N" },
+      { icon: tsIcon, label: "TS" },
+      { icon: jsIcon, label: "JS" },
+      { icon: cssIcon, label: "CSS" },
+      { icon: webflowIcon, label: "WF" },
+    ],
+    columns: [
+      ["React", "TypeScript", "Next.js", "JavaScript"],
+      ["Tailwind", "Sass / CSS", "Webflow", "HTML"],
+    ],
+    statusLabel: "Build status",
+    status: "Components online",
+    level: "92%",
+  },
+  {
+    index: "02",
+    kicker: "Logic",
+    title: "Backend",
+    subtitle: "APIs · services · distributed systems",
+    icon: Server,
+    chips: [
+      { icon: nodejsIcon, label: "JS" },
+      { icon: pythonIcon, label: "PY" },
+      { icon: expressIcon, label: "EX" },
+      { icon: graphqlIcon, label: "GQL" },
+    ],
+    columns: [
+      ["Node.js", "Express", "Python", "Java"],
+      ["GraphQL", "REST APIs", "Auth", "Workers"],
+    ],
+    statusLabel: "Request flow",
+    status: "Services synchronized",
+    level: "88%",
+  },
+  {
+    index: "03",
+    kicker: "Knowledge",
+    title: "Data",
+    subtitle: "Persistence · caching · modeling",
+    icon: Database,
+    chips: [
+      { icon: postgresqlIcon, label: "PG" },
+      { icon: mongodbIcon, label: "MDB" },
+    ],
+    columns: [
+      ["PostgreSQL", "MongoDB", "MySQL", "SQL"],
+      ["Firebase", "Data modeling", "Query design", "Performance"],
+    ],
+    statusLabel: "Data pipeline",
+    status: "Streams healthy",
+    level: "84%",
+  },
+  {
+    index: "04",
+    kicker: "Infrastructure",
+    title: "Cloud",
+    subtitle: "Scale · containers · automation",
+    icon: Cloud,
+    chips: [
+      { icon: dockerIcon, label: "DOC" },
+      { icon: githubIcon, label: "GH" },
+    ],
+    columns: [
+      ["AWS", "Vercel", "Docker", "GitHub"],
+      ["Git", "CI / CD", "Clerk", "VS Code"],
+    ],
+    statusLabel: "Deployment",
+    status: "Delivery ready",
+    level: "90%",
+  },
 ];
-
-const categories = [
-  { id: "all", label: "All" },
-  { id: "frontend", label: "Frontend" },
-  { id: "backend", label: "Backend" },
-  { id: "tools", label: "Tools" },
-];
-
-const iconImages = {
-  html: htmlIcon,
-  css: cssIcon,
-  sass: sassIcon,
-  javascript: jsIcon,
-  typescript: tsIcon,
-  react: reactIcon,
-  nextjs: nextjsIcon,
-  nodejs: nodejsIcon,
-  express: expressIcon,
-  mongodb: mongodbIcon,
-  postgresql: postgresqlIcon,
-  graphql: graphqlIcon,
-  java: javaIcon,
-  webflow: webflowIcon,
-  python: pythonIcon,
-  git: gitIcon,
-  github: githubIcon,
-  docker: dockerIcon,
-  firebase: firebaseIcon,
-  vscode: vscodeIcon,
-  clerk: clerkIcon,
-  sql: SQLIcon,
-  mysql: MySQLIcon,
-};
-
-const SkillChip = ({ skill }) => (
-  <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-card border border-border hover:border-primary/35 transition-colors">
-    <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0">
-      <img src={iconImages[skill.icon]} alt="" className="w-6 h-6 object-contain" />
-    </div>
-    <span className="text-sm font-medium">{skill.name}</span>
-  </div>
-);
-
-const Marquee = ({ items, reverse = false }) => {
-  const loop = [...items, ...items];
-  return (
-    <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-      <div
-        className={`flex w-max gap-3 ${reverse ? "animate-marquee-reverse" : "animate-marquee"} hover:[animation-play-state:paused]`}
-      >
-        {loop.map((skill, index) => (
-          <div
-            key={`${skill.name}-${index}`}
-            className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full bg-card border border-border"
-          >
-            <img src={iconImages[skill.icon]} alt="" className="w-5 h-5 object-contain" />
-            <span className="text-sm whitespace-nowrap">{skill.name}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
 
 export const SkillsSection = () => {
-  const [activeCategory, setActiveCategory] = useState("all");
-  const filteredSkills = skills.filter(
-    (skill) => activeCategory === "all" || skill.category === activeCategory
-  );
-
   return (
-    <section id="skills" className="py-20 md:py-28 px-4">
-      <div className="container mx-auto max-w-6xl">
+    <section id="skills" className="scroll-mt-24 py-10 md:py-14">
+      <div className="mx-auto max-w-[1440px] px-6">
         <SectionHeader
-          eyebrow="Skills"
-          title="Tools I use to"
-          highlight="ship with confidence."
-          description="A focused stack for product work — frontend craft, solid backends, and the tooling that keeps delivery calm."
+          title="Technology universe"
+          description="Engineering stack / systems / infrastructure / intelligence"
         />
 
-        <div className="space-y-3 mb-12">
-          <Marquee items={skills.slice(0, 12)} />
-          <Marquee items={skills.slice(12)} reverse />
-        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {domains.map((domain) => (
+            <HudPanel key={domain.title} className="flex flex-col p-5 text-left">
+              <div className="mb-4 flex items-start justify-between">
+                <p className="hud-kicker">
+                  {domain.index} / {domain.kicker}
+                </p>
+                <domain.icon className="h-5 w-5 text-primary" />
+              </div>
+              <h3 className="text-2xl font-semibold uppercase tracking-[0.08em]">{domain.title}</h3>
+              <p className="mt-1 text-xs text-muted-foreground">{domain.subtitle}</p>
 
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`cursor-pointer px-5 py-2 rounded-full text-sm font-medium border transition-colors ${
-                activeCategory === category.id
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-card text-muted-foreground border-border hover:text-foreground"
-              }`}
-            >
-              {category.label}
-            </button>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {domain.chips.map((chip) => (
+                  <span
+                    key={chip.label}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-primary/35 bg-primary/5 px-2 py-1"
+                  >
+                    <img src={chip.icon} alt="" className="h-3.5 w-3.5 rounded-sm bg-white object-contain" />
+                    <span className="font-mono text-[10px] tracking-wider text-primary">{chip.label}</span>
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-5 grid flex-1 grid-cols-2 gap-x-3 text-sm text-muted-foreground">
+                {domain.columns.map((column, columnIndex) => (
+                  <ul key={columnIndex} className="space-y-1.5">
+                    {column.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                ))}
+              </div>
+
+              <div className="mt-5 border-t border-primary/15 pt-3">
+                <div className="mb-2 flex items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.14em]">
+                  <span className="text-muted-foreground">{domain.statusLabel}</span>
+                  <span className="text-right text-primary">{domain.status}</span>
+                </div>
+                <div className="h-1 overflow-hidden rounded-full bg-primary/15">
+                  <div
+                    className="h-full rounded-full bg-primary shadow-[0_0_12px_hsl(var(--primary))]"
+                    style={{ width: domain.level }}
+                  />
+                </div>
+              </div>
+            </HudPanel>
           ))}
         </div>
 
-        <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          <AnimatePresence mode="popLayout">
-            {filteredSkills.map((skill) => (
-              <motion.div
-                key={skill.name}
-                layout
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-              >
-                <SkillChip skill={skill} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <p className="mt-8 text-center font-mono text-[10px] uppercase tracking-[0.22em] text-primary/70">
+          Systems connected · 4 domains · build · ship · scale
+        </p>
       </div>
     </section>
   );

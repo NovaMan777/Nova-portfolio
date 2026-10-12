@@ -11,4 +11,11 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    watch: {
+      // Large animation files in public/nova get locked while they are copied.
+      // Watching them crashes Vite on Windows with EBUSY.
+      ignored: ["**/public/nova/**"],
+    },
+  },
 });

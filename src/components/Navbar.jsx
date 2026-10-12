@@ -1,53 +1,23 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-  Home,
-  User,
-  Code,
   Briefcase,
-  MessageSquare,
+  Code,
+  Home,
   Mail,
-  Sun,
-  Moon,
+  PenTool,
   Volume2,
   VolumeX,
-  ArrowUpRight,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { name: "Home", href: "#hero", icon: Home },
-  { name: "About", href: "#about", icon: User },
-  { name: "Skills", href: "#skills", icon: Code },
-  { name: "Work", href: "#projects", icon: Briefcase },
-  { name: "Kind words", href: "#testimonials", icon: MessageSquare },
+  { name: "Design", href: "#about", icon: PenTool },
+  { name: "Code", href: "#skills", icon: Code },
+  { name: "Projects", href: "#projects", icon: Briefcase },
   { name: "Contact", href: "#contact", icon: Mail },
 ];
-
-const ThemeToggle = () => {
-  const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  if (!mounted) {
-    return <div className="w-9 h-9" aria-hidden="true" />;
-  }
-
-  const isDark = resolvedTheme === "dark";
-
-  return (
-    <button
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="cursor-pointer p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-      title="Toggle theme"
-      aria-label="Toggle theme"
-    >
-      {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-    </button>
-  );
-};
 
 export const Navbar = () => {
   const [activeSection, setActiveSection] = useState("#hero");
@@ -79,30 +49,24 @@ export const Navbar = () => {
     if (isMusicPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play().catch(console.error);
+      audioRef.current.play().catch(() => {});
     }
-    setIsMusicPlaying(!isMusicPlaying);
+    setIsMusicPlaying((playing) => !playing);
   };
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 24);
 
-      const sections = navItems.map((item) => item.href);
-      const scrollPosition = window.scrollY + 120;
-
-      for (const section of sections) {
-        const element = document.querySelector(section);
-        if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetHeight = element.offsetHeight;
-          if (
-            scrollPosition >= offsetTop &&
-            scrollPosition < offsetTop + offsetHeight
-          ) {
-            setActiveSection(section);
-            break;
-          }
+      const scrollPosition = window.scrollY + 140;
+      for (const item of navItems) {
+        const element = document.querySelector(item.href);
+        if (!element) continue;
+        const offsetTop = element.offsetTop;
+        const offsetHeight = element.offsetHeight;
+        if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+          setActiveSection(item.href);
+          break;
         }
       }
     };
@@ -114,98 +78,82 @@ export const Navbar = () => {
   return (
     <>
       <motion.header
-        className="fixed top-0 left-0 right-0 z-50 hidden md:block"
-        initial={{ y: -24, opacity: 0 }}
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 hidden border-b md:block",
+          scrolled
+            ? "border-primary/20 bg-background/75 backdrop-blur-xl"
+            : "border-transparent bg-transparent"
+        )}
+        initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div
-          className={cn(
-            "mx-auto mt-4 max-w-6xl px-4 transition-all duration-300",
-            scrolled && "mt-3"
-          )}
-        >
-          <div
-            className={cn(
-              "flex items-center justify-between gap-4 rounded-full border px-3 py-2 backdrop-blur-xl transition-all duration-300",
-              scrolled
-                ? "bg-background/80 border-border shadow-lg shadow-black/5"
-                : "bg-background/50 border-transparent"
-            )}
-          >
-            <a href="#hero" className="flex items-center gap-2.5 pl-2 pr-1">
-              <img src="/logo.svg" alt="" className="h-7 w-7 object-contain dark:invert" />
-              <span className="font-semibold tracking-tight text-foreground">
-                Tomas
-              </span>
-            </a>
+        <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-6 py-3.5">
+          <a href="#hero" className="flex items-center gap-2.5">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full border border-primary/70 text-primary">
+              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
+                <path d="M12 1.2 13.7 8.4 21 6.4 15.7 11.4 22.8 12 15.7 12.6 21 17.6 13.7 15.6 12 22.8 10.3 15.6 3 17.6 8.3 12.6 1.2 12 8.3 11.4 3 6.4 10.3 8.4 12 1.2Z" />
+              </svg>
+            </span>
+            <span className="text-[13px] font-semibold tracking-[0.22em] text-white">NOVA MAN</span>
+          </a>
 
-            <nav className="flex items-center gap-0.5">
-              {navItems.map((item) => (
+          <nav className="flex items-center gap-1">
+            {navItems.map((item) => {
+              const active = activeSection === item.href;
+              return (
                 <a
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "px-3.5 py-1.5 rounded-full text-sm transition-colors",
-                    activeSection === item.href
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    "relative cursor-pointer px-3.5 py-2 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors",
+                    active ? "text-primary" : "text-white/70 hover:text-white"
                   )}
                 >
                   {item.name}
+                  <span
+                    className={cn(
+                      "absolute inset-x-3.5 bottom-1 h-px bg-primary shadow-[0_0_8px_hsl(var(--primary))]",
+                      active ? "opacity-100" : "opacity-0"
+                    )}
+                  />
                 </a>
-              ))}
-            </nav>
+              );
+            })}
+          </nav>
 
-            <div className="flex items-center gap-1 pr-1">
-              <button
-                onClick={toggleMusic}
-                disabled={!isAudioReady}
-                className={cn(
-                  "p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors",
-                  !isAudioReady && "opacity-40 cursor-not-allowed"
-                )}
-                title={isMusicPlaying ? "Pause music" : "Play music"}
-                aria-label={isMusicPlaying ? "Pause music" : "Play music"}
-              >
-                {isMusicPlaying ? (
-                  <Volume2 className="w-4 h-4" />
-                ) : (
-                  <VolumeX className="w-4 h-4" />
-                )}
-              </button>
-              <ThemeToggle />
-              <a
-                href="#contact"
-                className="ml-1 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition-opacity"
-              >
-                Let&apos;s talk
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
-            </div>
+          <div className="flex items-center justify-end gap-3">
+            <span className="hidden text-[10px] font-medium uppercase tracking-[0.28em] text-white/55 lg:inline">
+              Building digital dreams
+            </span>
+            <button
+              onClick={toggleMusic}
+              disabled={!isAudioReady}
+              className={cn(
+                "cursor-pointer p-2 text-white/55 transition-colors hover:text-primary",
+                !isAudioReady && "cursor-not-allowed opacity-40"
+              )}
+              title={isMusicPlaying ? "Pause music" : "Play music"}
+              aria-label={isMusicPlaying ? "Pause music" : "Play music"}
+            >
+              {isMusicPlaying ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+            </button>
           </div>
         </div>
       </motion.header>
 
-      <div className="fixed top-4 right-4 z-50 flex items-center gap-2 md:hidden">
+      <div className="fixed right-4 top-4 z-50 md:hidden">
         <button
           onClick={toggleMusic}
           disabled={!isAudioReady}
           className={cn(
-            "p-2.5 rounded-full bg-background/80 backdrop-blur-md border border-border text-foreground shadow-sm",
+            "rounded-full border border-primary/30 bg-background/80 p-2.5 text-foreground shadow-sm backdrop-blur-md",
             !isAudioReady && "opacity-40"
           )}
           aria-label={isMusicPlaying ? "Pause music" : "Play music"}
         >
-          {isMusicPlaying ? (
-            <Volume2 className="w-4 h-4" />
-          ) : (
-            <VolumeX className="w-4 h-4" />
-          )}
+          {isMusicPlaying ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
         </button>
-        <div className="rounded-full bg-background/80 backdrop-blur-md border border-border shadow-sm">
-          <ThemeToggle />
-        </div>
       </div>
 
       <motion.nav
@@ -213,20 +161,20 @@ export const Navbar = () => {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
       >
-        <div className="flex items-center gap-0.5 rounded-full bg-background/85 backdrop-blur-xl border border-border shadow-lg p-1.5">
+        <div className="flex items-center gap-0.5 rounded-full border border-primary/25 bg-background/85 p-1.5 shadow-lg backdrop-blur-xl">
           {navItems.map((item) => (
             <a
               key={item.name}
               href={item.href}
               className={cn(
-                "p-2.5 rounded-full transition-colors",
+                "rounded-full p-2.5 transition-colors",
                 activeSection === item.href
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground"
               )}
               aria-label={item.name}
             >
-              <item.icon className="w-4 h-4" />
+              <item.icon className="h-4 w-4" />
             </a>
           ))}
         </div>

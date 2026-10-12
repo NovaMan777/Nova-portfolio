@@ -65,7 +65,7 @@ export const ContactSection = () => {
     } catch {
       toast({
         title: "Something went wrong",
-        description: "Please try again or email me at uigraslasu@gmail.com",
+        description: "Please try again or email me at seraph.nova.dev@gmail.com",
         variant: "destructive",
       });
     } finally {
@@ -77,43 +77,43 @@ export const ContactSection = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "uigraslasu@gmail.com",
-      href: "mailto:uigraslasu@gmail.com",
+      value: "seraph.nova.dev@gmail.com",
+      href: "mailto:seraph.nova.dev@gmail.com",
     },
     {
       icon: Send,
       label: "Telegram",
-      value: "@TomasCooper1004",
-      href: "https://t.me/TomasCooper1004",
+      value: "@NovaMan777",
+      href: "https://t.me/NovaMan777",
     },
     {
       icon: Github,
       label: "GitHub",
-      value: "@tomas0502",
-      href: "https://github.com/tomas0502",
+      value: "@NovaMan777",
+      href: "https://github.com/NovaMan777",
     },
     {
       icon: MapPin,
       label: "Location",
-      value: "Mumbai, India",
+      value: "Toronto, Canada",
     },
   ];
 
   return (
-    <section id="contact" className="py-20 md:py-28 px-4">
-      <div className="container mx-auto max-w-6xl">
+    <section id="contact" className="scroll-mt-24 py-10 md:py-14">
+      <div className="mx-auto max-w-[1440px] px-6">
         <SectionHeader
+          tone="green"
           eyebrow="Contact"
-          title="Let's make something"
-          highlight="worth shipping."
-          description="Have a project in mind, a role to fill, or just want to say hello? My inbox is open."
+          title="Open channel"
+          description="Projects / roles / hello"
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           <div className="lg:col-span-2 space-y-3 text-left">
             {details.map((item) => {
               const content = (
-                <div className="flex items-center gap-4 p-4 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors">
+                <div className="hud-panel flex items-center gap-4 p-4 transition-colors hover:border-primary/55">
                   <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
                     <item.icon className="h-4 w-4" />
                   </div>
@@ -141,7 +141,7 @@ export const ContactSection = () => {
             })}
           </div>
 
-          <div className="lg:col-span-3 p-6 sm:p-8 rounded-3xl bg-card border border-border text-left">
+          <div className="hud-panel p-6 text-left sm:p-8 lg:col-span-3">
             <h3 className="text-xl font-semibold mb-6">Send a message</h3>
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>

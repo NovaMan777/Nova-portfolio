@@ -10,7 +10,7 @@ const testimonials = [
     name: "Alex Johnson",
     role: "Product Director, TechCorp",
     content:
-      "Working with Tomas was seamless from day one. He delivered a full-stack solution ahead of schedule and stayed clear in every update. It's rare to find an engineer who understands both the tech and the business this well.",
+      "Working with Nova Man was seamless from day one. He delivered a full-stack solution ahead of schedule and stayed clear in every update. It's rare to find an engineer who understands both the tech and the business this well.",
     rating: 5,
     image: "/testimonials/alex-johnson.png",
   },
@@ -28,7 +28,7 @@ const testimonials = [
     name: "David Wilson",
     role: "CTO, Startup Ventures",
     content:
-      "From wireframes to deployment, Tomas owned the stack with confidence. The product is fast, reliable, and looks considered. I wouldn't hesitate to work together again.",
+      "From wireframes to deployment, Nova Man owned the stack with confidence. The product is fast, reliable, and looks considered. I wouldn't hesitate to work together again.",
     rating: 5,
     image: "/testimonials/David Wilson.png",
   },
@@ -39,13 +39,13 @@ export const TestimonialSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="testimonials" className="relative py-20 md:py-28 px-4" ref={ref}>
-      <div className="container max-w-6xl mx-auto">
+    <section id="testimonials" className="relative scroll-mt-24 py-10 md:py-14" ref={ref}>
+      <div className="mx-auto max-w-[1440px] px-6">
         <SectionHeader
           eyebrow="Kind words"
           title="What collaborators"
           highlight="remember."
-          description="Notes from people I've built with — the part of the work that doesn't show up in a repo."
+          description="Notes from people I've built with"
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -55,7 +55,7 @@ export const TestimonialSection = () => {
               initial={{ opacity: 0, y: 24 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: index * 0.12, duration: 0.5 }}
-              className="bg-card border border-border rounded-3xl p-7 flex flex-col text-left hover:border-primary/30 transition-colors"
+              className="hud-panel flex flex-col p-7 text-left"
             >
               <Quote className="h-6 w-6 text-primary/40 mb-4" />
               <p className="text-sm sm:text-[15px] text-muted-foreground leading-relaxed flex-1">

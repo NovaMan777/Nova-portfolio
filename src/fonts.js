@@ -32,8 +32,3 @@ export async function preloadFonts() {
   );
   await document.fonts.ready;
 }
-
-export function fontsAreReady() {
-  if (typeof document === "undefined" || !document.fonts) return true;
-  return FONT_CHECKS.every((spec) => document.fonts.check(spec));
-}
