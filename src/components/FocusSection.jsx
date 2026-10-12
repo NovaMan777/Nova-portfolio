@@ -1,11 +1,14 @@
 import { Cloud, Code2, Network, Sparkles } from "lucide-react";
 import { HudPanel } from "./HudPanel";
 import { SectionHeader } from "./SectionHeader";
+import { AnimatedCounter } from "./motion/AnimatedCounter";
+import { LineChart } from "./motion/LineChart";
+import { PulseIcon } from "./motion/PulseIcon";
 
 const stats = [
-  { value: "9+", label: "Years shipping", hint: "Craft" },
-  { value: "55+", label: "Projects delivered", hint: "Build" },
-  { value: "35+", label: "Clients served", hint: "Partner" },
+  { value: 9, suffix: "+", label: "Years shipping", hint: "Craft" },
+  { value: 55, suffix: "+", label: "Projects delivered", hint: "Build" },
+  { value: 35, suffix: "+", label: "Clients served", hint: "Partner" },
 ];
 
 const focuses = [
@@ -48,33 +51,22 @@ export const FocusSection = () => {
             <span className="text-muted-foreground">Shipping rhythm</span>
             <span className="text-primary">Steady cadence</span>
           </div>
-          <svg viewBox="0 0 600 70" className="h-16 w-full text-primary" aria-hidden="true">
-            <polyline
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              points={wave}
-              opacity="0.35"
-              strokeDasharray="4 6"
-            />
-            <polyline
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.4"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              points={wave}
-            />
-          </svg>
+          <LineChart
+            points={wave}
+            viewBox="0 0 600 70"
+            className="h-16 w-full"
+            guide
+            label="Shipping rhythm"
+          />
         </HudPanel>
 
         <div className="mb-14 grid grid-cols-1 gap-4 md:grid-cols-3">
           {stats.map((stat) => (
             <HudPanel key={stat.label} className="p-5 text-left">
               <p className="hud-kicker">{stat.hint}</p>
-              <p className="mt-2 text-4xl font-semibold tracking-tight text-primary">{stat.value}</p>
+              <p className="mt-2 text-4xl font-semibold tracking-tight text-primary">
+                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+              </p>
               <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
             </HudPanel>
           ))}
@@ -87,10 +79,10 @@ export const FocusSection = () => {
         />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {focuses.map((focus) => (
+          {focuses.map((focus, index) => (
             <HudPanel key={focus.title} className="p-6 text-center">
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-primary/40 text-primary">
-                <focus.icon className="h-6 w-6" />
+                <PulseIcon icon={focus.icon} className="h-6 w-6" delay={index * 420} />
               </div>
               <h3 className="text-sm font-semibold uppercase tracking-[0.16em]">{focus.title}</h3>
               <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">

@@ -1,6 +1,8 @@
 import { AppWindow, Cloud, Cpu, Database, Download, Hexagon, Plus, Shield } from "lucide-react";
 import { HudPanel } from "./HudPanel";
 import { SectionHeader } from "./SectionHeader";
+import { PulseIcon } from "./motion/PulseIcon";
+import { motion, prefersReducedMotion } from "@/lib/motion";
 
 const flow = [
   { icon: Plus, label: "Client application" },
@@ -79,7 +81,7 @@ export const AboutSection = () => {
           {flow.map((item, index) => (
             <div key={item.label} className="flex flex-col items-center">
               <div className="flex w-full items-center justify-center gap-2 rounded-full border border-primary/40 bg-background/70 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground shadow-[0_0_24px_hsl(var(--primary)/0.08)]">
-                <item.icon className="h-3.5 w-3.5 text-primary" />
+                <PulseIcon icon={item.icon} className="h-3.5 w-3.5 text-primary" delay={index * 360} />
                 {item.label}
               </div>
               {index < flow.length - 1 && (
@@ -92,23 +94,28 @@ export const AboutSection = () => {
         <div className="relative mb-8 hidden xl:block">
           <div className="absolute inset-x-10 top-1/2 border-t border-dashed border-primary/30" />
           <div className="relative flex justify-between px-[8%]">
-            {modules.map((module) => (
+            {modules.map((module, index) => (
               <span
                 key={module.index}
                 className="h-2 w-2 rounded-full bg-primary shadow-[0_0_10px_hsl(var(--primary))]"
+                style={
+                  prefersReducedMotion()
+                    ? undefined
+                    : { animation: `motion-icon-glow ${motion.loop.icon}ms ease-in-out ${index * 360}ms infinite` }
+                }
               />
             ))}
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
-          {modules.map((module) => (
+          {modules.map((module, index) => (
             <HudPanel key={module.index} className="p-4 text-left sm:p-5">
               <div className="mb-4 flex items-start justify-between gap-3">
                 <p className="hud-kicker">
                   {module.index} / {module.kicker}
                 </p>
-                <module.icon className="h-5 w-5 text-primary" />
+                <PulseIcon icon={module.icon} className="h-5 w-5 text-primary" delay={index * 280} />
               </div>
               <h3 className="text-lg font-semibold uppercase tracking-[0.08em]">{module.title}</h3>
               <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">

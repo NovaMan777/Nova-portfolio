@@ -1,6 +1,9 @@
 import { Cloud, Database, Monitor, Server } from "lucide-react";
 import { HudPanel } from "./HudPanel";
 import { SectionHeader } from "./SectionHeader";
+import { PulseIcon } from "./motion/PulseIcon";
+import { SkillBar } from "./motion/SkillBar";
+import { motion } from "@/lib/motion";
 
 import cssIcon from "@/assets/icons/css.png";
 import dockerIcon from "@/assets/icons/docker.png";
@@ -108,13 +111,13 @@ export const SkillsSection = () => {
         />
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {domains.map((domain) => (
+          {domains.map((domain, index) => (
             <HudPanel key={domain.title} className="flex flex-col p-5 text-left">
               <div className="mb-4 flex items-start justify-between">
                 <p className="hud-kicker">
                   {domain.index} / {domain.kicker}
                 </p>
-                <domain.icon className="h-5 w-5 text-primary" />
+                <PulseIcon icon={domain.icon} className="h-5 w-5 text-primary" delay={index * 450} />
               </div>
               <h3 className="text-2xl font-semibold uppercase tracking-[0.08em]">{domain.title}</h3>
               <p className="mt-1 text-xs text-muted-foreground">{domain.subtitle}</p>
@@ -146,12 +149,12 @@ export const SkillsSection = () => {
                   <span className="text-muted-foreground">{domain.statusLabel}</span>
                   <span className="text-right text-primary">{domain.status}</span>
                 </div>
-                <div className="h-1 overflow-hidden rounded-full bg-primary/15">
-                  <div
-                    className="h-full rounded-full bg-primary shadow-[0_0_12px_hsl(var(--primary))]"
-                    style={{ width: domain.level }}
-                  />
-                </div>
+                <SkillBar
+                  value={domain.level}
+                  delay={index * motion.skill.stagger}
+                  trackClassName="h-1"
+                  className="shadow-[0_0_12px_hsl(var(--primary))]"
+                />
               </div>
             </HudPanel>
           ))}

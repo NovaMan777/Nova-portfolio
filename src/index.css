@@ -192,6 +192,64 @@
   border-bottom: 1.5px solid hsl(var(--primary));
 }
 
+@keyframes motion-ring-fill {
+  0% {
+    stroke-dashoffset: var(--ring-from);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  68% {
+    stroke-dashoffset: var(--ring-to);
+  }
+  100% {
+    stroke-dashoffset: var(--ring-to);
+  }
+}
+
+@keyframes motion-line-flow {
+  to {
+    stroke-dashoffset: -1;
+  }
+}
+
+@keyframes motion-dash-flow {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+@keyframes motion-bar-fill {
+  0% {
+    transform: scaleX(0);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  68% {
+    transform: scaleX(var(--bar-scale));
+  }
+  100% {
+    transform: scaleX(var(--bar-scale));
+  }
+}
+
+@keyframes motion-bar-glow {
+  0%,
+  100% {
+    opacity: 0.38;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes motion-icon-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

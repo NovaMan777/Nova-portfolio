@@ -1,3 +1,6 @@
+import { motion } from "@/lib/motion";
+import { RevealText } from "./motion/RevealText";
+
 export const SectionHeader = ({
   eyebrow,
   title,
@@ -11,19 +14,27 @@ export const SectionHeader = ({
   return (
     <div className="mx-auto mb-6 max-w-4xl text-center md:mb-7">
       {eyebrow && (
-        <p className="hud-kicker mb-3">{eyebrow}</p>
+        <RevealText as="p" className="hud-kicker mb-3">
+          {eyebrow}
+        </RevealText>
       )}
-      <h2
+      <RevealText
+        as="h2"
         className={`text-[1.65rem] font-semibold uppercase leading-[1.05] tracking-[0.045em] sm:text-4xl md:text-5xl ${titleColor}`}
+        delay={motion.text.stagger}
       >
         {title}
         {highlight ? " " : ""}
         {highlight && <span className={highlightColor}>{highlight}</span>}
-      </h2>
+      </RevealText>
       {description && (
-        <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.22em] text-primary/85">
+        <RevealText
+          as="p"
+          className="mt-3 font-mono text-[11px] uppercase tracking-[0.22em] text-primary/85"
+          delay={motion.text.stagger * 2}
+        >
           {description}
-        </p>
+        </RevealText>
       )}
     </div>
   );

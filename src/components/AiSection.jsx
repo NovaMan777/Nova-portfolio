@@ -1,6 +1,9 @@
 import { ArrowRight, FileText, Network, Sparkles } from "lucide-react";
 import { HudPanel } from "./HudPanel";
 import { SectionHeader } from "./SectionHeader";
+import { PulseIcon } from "./motion/PulseIcon";
+import { RevealText } from "./motion/RevealText";
+import { motion } from "@/lib/motion";
 
 const panels = [
   {
@@ -36,12 +39,19 @@ export const AiSection = () => {
     <section id="ai" className="scroll-mt-24 py-10 md:py-14">
       <div className="mx-auto max-w-[1440px] px-6">
         <div className="mb-10 overflow-hidden rounded-[1.6rem] border border-primary/25 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.18),transparent_55%),linear-gradient(90deg,hsl(156_40%_7%),hsl(150_45%_6%))] px-6 py-8 text-center">
-          <h2 className="text-3xl font-semibold uppercase tracking-[0.08em] text-primary sm:text-5xl">
+          <RevealText
+            as="h2"
+            className="text-3xl font-semibold uppercase tracking-[0.08em] text-primary sm:text-5xl"
+          >
             AI engineering
-          </h2>
-          <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.24em] text-primary/80">
+          </RevealText>
+          <RevealText
+            as="p"
+            className="mt-3 font-mono text-[11px] uppercase tracking-[0.24em] text-primary/80"
+            delay={motion.text.stagger}
+          >
             Intelligence / generation / automation / product
-          </p>
+          </RevealText>
         </div>
 
         <SectionHeader
@@ -61,13 +71,13 @@ export const AiSection = () => {
             <ArrowRight className="absolute -right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
           </div>
 
-          {panels.map((panel) => (
+          {panels.map((panel, index) => (
             <HudPanel key={panel.title} className="p-6 text-left sm:p-7">
               <div className="mb-6 flex items-start justify-between">
                 <p className="hud-kicker">
                   {panel.index} / {panel.kicker}
                 </p>
-                <panel.icon className="h-8 w-8 text-primary" />
+                <PulseIcon icon={panel.icon} className="h-8 w-8 text-primary" delay={index * 500} />
               </div>
               <h3 className="text-3xl font-semibold uppercase tracking-[0.06em]">{panel.title}</h3>
               <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">

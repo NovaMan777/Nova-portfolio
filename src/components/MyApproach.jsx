@@ -1,11 +1,27 @@
 import { HudPanel } from "./HudPanel";
 import { SectionHeader } from "./SectionHeader";
+import { AnimatedCounter } from "./motion/AnimatedCounter";
+import { BarChart } from "./motion/BarChart";
+import { ProgressRing } from "./motion/ProgressRing";
+import { SkillBar } from "./motion/SkillBar";
 
 const metrics = [
-  ["Projects", "55+"],
-  ["Years", "9+"],
-  ["Clients", "35+"],
-  ["Reply", "< 24h"],
+  { label: "Projects", value: 55, suffix: "+" },
+  { label: "Years", value: 9, suffix: "+" },
+  { label: "Clients", value: 35, suffix: "+" },
+  { label: "Reply", value: 24, prefix: "< ", suffix: "h" },
+];
+
+const shippingBars = [
+  { label: "W1", value: 16 },
+  { label: "W2", value: 32 },
+  { label: "W3", value: 24 },
+  { label: "W4", value: 60 },
+  { label: "W5", value: 48 },
+  { label: "W6", value: 84 },
+  { label: "W7", value: 68 },
+  { label: "W8", value: 100 },
+  { label: "W9", value: 88 },
 ];
 
 const principles = [
@@ -63,13 +79,15 @@ export default function MyApproach() {
               Shipped work
             </p>
             <ul className="mt-4">
-              {metrics.map(([label, value]) => (
+              {metrics.map((item) => (
                 <li
-                  key={label}
+                  key={item.label}
                   className="flex items-center justify-between border-b border-primary/10 py-2 text-sm"
                 >
-                  <span className="text-muted-foreground">{label}</span>
-                  <span className="font-medium text-primary">{value}</span>
+                  <span className="text-muted-foreground">{item.label}</span>
+                  <span className="font-medium text-primary">
+                    <AnimatedCounter value={item.value} prefix={item.prefix} suffix={item.suffix} />
+                  </span>
                 </li>
               ))}
             </ul>
@@ -80,16 +98,7 @@ export default function MyApproach() {
             <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
               Shipping rhythm
             </p>
-            <svg viewBox="0 0 240 90" className="mt-6 h-24 w-full text-primary" aria-hidden="true">
-              <polyline
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                points="0,70 30,62 60,66 90,48 120,54 150,36 180,44 210,28 240,34"
-              />
-            </svg>
+            <BarChart data={shippingBars} viewBox="0 0 240 90" className="mt-6 h-24 w-full" label="Shipping rhythm" />
           </HudPanel>
 
           <HudPanel className="p-5 text-left">
@@ -98,15 +107,18 @@ export default function MyApproach() {
               How the work is weighted
             </p>
             <div className="mt-6 space-y-4">
-              {weights.map((item) => (
+              {weights.map((item, index) => (
                 <div key={item.label}>
                   <div className="mb-1.5 flex justify-between font-mono text-[10px] uppercase tracking-[0.14em]">
                     <span className="text-muted-foreground">{item.label}</span>
                     <span className="text-primary">High</span>
                   </div>
-                  <div className="h-1.5 overflow-hidden rounded-full bg-primary/15">
-                    <div className="h-full rounded-full bg-primary" style={{ width: item.level }} />
-                  </div>
+                  <SkillBar
+                    value={item.level}
+                    delay={index * 500}
+                    loop
+                    trackClassName="h-1.5"
+                  />
                 </div>
               ))}
             </div>
@@ -117,24 +129,9 @@ export default function MyApproach() {
             <p className="mt-1 self-start font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
               Health / reply / recover
             </p>
-            <div className="relative mt-4 h-28 w-28">
-              <svg viewBox="0 0 80 80" className="h-full w-full -rotate-90 text-primary">
-                <circle cx="40" cy="40" r="30" fill="none" stroke="currentColor" strokeOpacity="0.15" strokeWidth="6" />
-                <circle
-                  cx="40"
-                  cy="40"
-                  r="30"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="6"
-                  strokeLinecap="round"
-                  strokeDasharray={`${0.86 * 2 * Math.PI * 30} ${2 * Math.PI * 30}`}
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center text-sm font-semibold">
-                &lt; 24h
-              </div>
-            </div>
+            <ProgressRing value={0.86} className="relative mt-4 h-28 w-28">
+              <AnimatedCounter value={24} prefix="< " suffix="h" />
+            </ProgressRing>
           </HudPanel>
         </div>
 
