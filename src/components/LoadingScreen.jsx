@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { preloadFonts } from "@/fonts";
 
-const ORB_SRC = "/nova/1.gif";
+const ORB_SRC = "/nova/1.webp";
 const HERO_TIMEOUT_MS = 20000;
 
 function heroSrc() {
