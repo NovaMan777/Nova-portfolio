@@ -3,10 +3,57 @@ import { motion } from "framer-motion";
 import { preloadFonts } from "@/fonts";
 
 const ORB_SRC = "/nova/1.gif";
+const HERO_TIMEOUT_MS = 20000;
+
 function heroSrc() {
   if (window.matchMedia("(max-width: 767px)").matches) return "/nova/mobile-hero.svg";
   if (window.matchMedia("(max-width: 1023px)").matches) return "/nova/tablet-hero.svg";
   return "/nova/desktop-hero.svg";
+}
+
+const CONTENT_IMAGES = [
+  "/nova/NOVA_MAN_enhanced_animated_background.svg",
+  ORB_SRC,
+  "/logo.webp",
+  "/projects/project1.png",
+  "/projects/project2.png",
+  "/projects/project3.png",
+  "/projects/project4.png",
+  "/projects/project5.png",
+  "/projects/project6.png",
+  "/projects/project8.png",
+  "/projects/project9.png",
+  "/testimonials/alex-johnson.png",
+  "/testimonials/maria-chen.png",
+  "/testimonials/David Wilson.png",
+];
+
+function decodeImage(src) {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve();
+    image.onerror = () => resolve();
+    image.src = src;
+  });
+}
+
+async function readAsset(src) {
+  const response = await fetch(src);
+  if (!response.ok) throw new Error(src);
+  await response.arrayBuffer();
+  await decodeImage(src);
+}
+
+async function readHero(src) {
+  const started = performance.now();
+  while (performance.now() - started < HERO_TIMEOUT_MS) {
+    try {
+      await readAsset(src);
+      return;
+    } catch {
+      await new Promise((resolve) => window.setTimeout(resolve, 500));
+    }
+  }
 }
 
 const STAGES = [
@@ -34,6 +81,7 @@ const LoadingScreen = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [exiting, setExiting] = useState(false);
   const assetsReady = useRef(false);
+  const loadedFraction = useRef(0);
   const startTime = useRef(performance.now());
   const progressRef = useRef(0);
   const finished = useRef(false);
@@ -49,16 +97,18 @@ const LoadingScreen = ({ onComplete }) => {
       window.setTimeout(onComplete, 500);
     };
 
+    const sources = [heroSrc(), ...CONTENT_IMAGES];
+    let finishedCount = 0;
+    const markLoaded = () => {
+      finishedCount += 1;
+      loadedFraction.current = finishedCount / sources.length;
+    };
+
     const imageReady = Promise.all(
-      [ORB_SRC, heroSrc()].map(
-        (src) =>
-          new Promise((resolve) => {
-            const image = new Image();
-            image.onload = () => resolve();
-            image.onerror = () => resolve();
-            image.src = src;
-          })
-      )
+      sources.map((src, index) => {
+        const load = index === 0 ? readHero(src) : readAsset(src).catch(() => null);
+        return load.finally(markLoaded);
+      })
     );
 
     Promise.all([preloadFonts().catch(() => null), imageReady]).finally(() => {
@@ -70,12 +120,10 @@ const LoadingScreen = ({ onComplete }) => {
 
       const elapsed = now - startTime.current;
       const timeBased = Math.min(92, (elapsed / MIN_LOAD_MS) * 92);
-      let next = timeBased;
+      const fileBased = Math.min(99, loadedFraction.current * 100);
+      let next = Math.max(timeBased, fileBased);
 
-      if (assetsReady.current) {
-        next = Math.max(timeBased, progressRef.current + 3);
-        if (elapsed >= MIN_LOAD_MS) next = 100;
-      }
+      if (assetsReady.current && elapsed >= MIN_LOAD_MS) next = 100;
 
       next = Math.min(100, Math.max(progressRef.current, next));
       progressRef.current = next;
